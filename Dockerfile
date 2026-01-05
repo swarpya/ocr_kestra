@@ -2,26 +2,29 @@ FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED=1
 
-# 1. Install System Dependencies
+# 1. System Dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     libgl1 \
     libglib2.0-0 \
     git \
+    poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Install CPU Torch stack FIRST
+# 2. Torch (CPU)
 RUN pip install --no-cache-dir \
     torch \
     torchvision \
     torchaudio \
     --index-url https://download.pytorch.org/whl/cpu
 
-# 3. Install Surya WITHOUT dependencies
+# 3. OCR Engines
+# Enable Surya
 RUN pip install --no-cache-dir --no-deps surya-ocr
+# Disable Chandra (save space)
+# RUN pip install --no-cache-dir chandra-ocr
 
-# 4. Manually install dependencies + FastAPI Server tools
-# ADDED: fastapi, uvicorn, python-multipart
+# 4. Server Dependencies
 RUN pip install --no-cache-dir \
     transformers \
     pillow \
@@ -30,7 +33,6 @@ RUN pip install --no-cache-dir \
     opencv-python-headless \
     filetype \
     click \
-    numpy \
     huggingface-hub \
     safetensors \
     pyyaml \
@@ -42,12 +44,11 @@ RUN pip install --no-cache-dir \
     scipy \
     fastapi \
     uvicorn \
-    python-multipart
+    python-multipart \
+    requests \
+    numpy
 
 WORKDIR /app
-
-# Copy the API code into the container
 COPY api_server.py /app/api_server.py
 
-# Start the API server
 CMD ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8000"]

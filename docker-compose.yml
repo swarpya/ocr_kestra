@@ -7,13 +7,15 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # CHANGE THIS: Mount the current directory (.) to /app
-      # Now the container sees client.py, api_server.py, and your input/output folders
+      # 1. Code stays in workspace
       - ./:/app
       
-      # Keep the model cache mapping
-      - /workspaces/ocr_kestra/surya_cache:/root/.cache/datalab
+      # 2. MODELS MOVE TO TMP (108GB Drive)
+      # We map the host's /tmp/ocr_models to the container's cache
+      - /tmp/ocr_models:/root/.cache
     
     environment:
       - PYTHONUNBUFFERED=1
+      # Tell HuggingFace to use this path specifically
+      - HF_HOME=/root/.cache/huggingface
     restart: always
