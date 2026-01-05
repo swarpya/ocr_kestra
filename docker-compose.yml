@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  ocr-api:
+    build: .
+    container_name: ocr_api_server
+    ports:
+      - "8000:8000"
+    volumes:
+      # CHANGE THIS: Mount the current directory (.) to /app
+      # Now the container sees client.py, api_server.py, and your input/output folders
+      - ./:/app
+      
+      # Keep the model cache mapping
+      - /workspaces/ocr_kestra/surya_cache:/root/.cache/datalab
+    
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always

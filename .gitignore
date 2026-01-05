@@ -1,0 +1,13 @@
+# Ignore heavy AI models and Data
+surya_cache/
+kestra-data/
+postgres-data/
+
+# Ignore local testing files
+documents_to_scan/
+ocr_results/
+__pycache__/
+
+# System files
+.DS_Store
+.env
