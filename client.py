@@ -6,7 +6,8 @@ import json
 API_URL = "http://localhost:8000/ocr"
 INPUT_FOLDER = "./documents_to_scan"
 OUTPUT_FOLDER = "./ocr_results"
-ENGINE = "tesseract"  # surya gives the best JSON structure
+# ENGINE = "surya"  # surya gives the best JSON structure
+ENGINE = "tesseract"
 # --------------
 
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -31,9 +32,10 @@ def scan_file(filename):
         print(f"❌ Connection Failed: {e}")
         return None
 
+# Change this line in client.py
 if __name__ == "__main__":
-    files = [f for f in os.listdir(INPUT_FOLDER) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg'))]
-    
+    # Add .pptx, .xlsx, .xls to the list
+    files = [f for f in os.listdir(INPUT_FOLDER) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg', '.pptx', '.xlsx', '.xls'))]
     if not files:
         print(f"⚠️  No files in {INPUT_FOLDER}")
     else:

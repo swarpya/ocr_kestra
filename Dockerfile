@@ -19,12 +19,9 @@ RUN pip install --no-cache-dir \
     --index-url https://download.pytorch.org/whl/cpu
 
 # 3. OCR Engines
-# Enable Surya
 RUN pip install --no-cache-dir --no-deps surya-ocr
-# Disable Chandra (save space)
-# RUN pip install --no-cache-dir chandra-ocr
 
-# 4. Server Dependencies
+# 4. Server Dependencies (Added pandas, openpyxl, python-pptx)
 RUN pip install --no-cache-dir \
     transformers \
     pillow \
@@ -46,7 +43,10 @@ RUN pip install --no-cache-dir \
     uvicorn \
     python-multipart \
     requests \
-    numpy
+    numpy \
+    pandas \
+    openpyxl \
+    python-pptx
 
 WORKDIR /app
 COPY api_server.py /app/api_server.py
